@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KKN Companion - Professional Schedule Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --forest-green: #228B22;
+            --soft-rose: #F8C8DC;
+            --pastel-cream: #F5F5DC;
+            --midnight-blue: #191970;
+            --leaf-green: #7CFC00;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .leaf-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-6 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm29 22c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM32 63c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm57-13c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23228B22' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .dark .leaf-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-6 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm29 22c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM32 63c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm57-13c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%237CFC00' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .calendar-day {
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-card {
+            transition: all 0.2s ease;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6B7280;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 leaf-pattern">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-700 to-blue-800 dark:from-green-900 dark:to-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-leaf text-3xl text-green-300"></i>
+                    <h1 class="text-2xl md:text-3xl font-bold">KKN Companion</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition">
+                        <i class="fas fa-moon hidden dark:block"></i>
+                        <i class="fas fa-sun block dark:hidden"></i>
+                    </button>
+                    <button id="print-report" class="hidden md:flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+            </div>
+            <p class="mt-2 text-green-100">Your professional KKN schedule manager</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Calendar Section -->
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">KKN Schedule Calendar</h2>
+                        <div class="flex space-x-2">
+                            <button id="prev-month" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="next-month" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 id="current-month" class="text-xl font-semibold text-center text-gray-700 dark:text-gray-300">July 2023</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-7 gap-1 mb-2">
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Sun</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Mon</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Tue</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Wed</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Thu</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Fri</div>
+                        <div class="text-center font-medium text-gray-500 dark:text-gray-400">Sat</div>
+                    </div>
+                    
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1">
+                        <!-- Calendar days will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Details Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Activity Details</h2>
+                    
+                    <div id="selected-date" class="mb-4 p-4 bg-green-50 dark:bg-gray-700 rounded-lg">
+                        <h3 class="font-semibold text-lg text-gray-800 dark:text-white">No date selected</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Select a date to view or add activities</p>
+                    </div>
+                    
+                    <div id="activity-form" class="hidden mb-6">
+                        <h3 class="font-semibold text-lg mb-3">Add New Activity</h3>
+                        <form id="add-activity-form" class="space-y-4">
+                            <div>
+                                <label for="activity-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                                <input type="text" id="activity-title" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="activity-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                                <textarea id="activity-description" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"></textarea>
+                            </div>
+                            <div>
+                                <label for="activity-location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+                                <input type="text" id="activity-location" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="activity-time" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Time</label>
+                                <input type="time" id="activity-time" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="activity-priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+                                <select id="activity-priority" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Activity</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div id="activities-list" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-lg">Activities</h3>
+                            <button id="add-activity-btn" class="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
+                                <i class="fas fa-plus-circle"></i> Add New
+                            </button>
+                        </div>
+                        <div id="activities-container" class="space-y-3 max-h-64 overflow-y-auto">
+                            <!-- Activities will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div id="file-upload-section" class="mt-6 hidden">
+                        <h3 class="font-semibold text-lg mb-3">Upload Files</h3>
+                        <form id="file-upload-form" class="space-y-4">
+                            <div class="flex items-center justify-center w-full">
+                                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 dark:text-gray-300 mb-2"></i>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG, PDF, DOCX, MP4 (Max 10MB)</p>
+                                    </div>
+                                    <input id="file-upload" type="file" class="hidden" multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp4">
+                                </label>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2">
+                                <i class="fas fa-upload"></i>
+                                <span>Upload Files</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div id="files-list" class="mt-6 hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-lg">Attached Files</h3>
+                        </div>
+                        <div id="files-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                            <!-- Files will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Print Button -->
+        <div class="mt-6 md:hidden">
+            <button id="mobile-print-report" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg transition flex items-center justify-center space-x-2">
+                <i class="fas fa-file-pdf"></i>
+                <span>Generate Report</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Generate KKN Report</h3>
+                <button id="close-report-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div id="report-content" class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">KKN Activity Report</h1>
+                        <p class="text-gray-600 dark:text-gray-300">Generated on <span id="report-date">July 15, 2023</span></p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 border-b pb-2">Summary</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="bg-green-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Total Activities</p>
+                                <p id="total-activities" class="text-2xl font-bold text-green-600 dark:text-green-400">0</p>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Total Files</p>
+                                <p id="total-files" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0</p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Duration</p>
+                                <p id="duration" class="text-2xl font-bold text-purple-600 dark:text-purple-400">1 month</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 border-b pb-2">Activities Timeline</h2>
+                        <div id="report-activities" class="space-y-6">
+                            <!-- Activities will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 border-b pb-2">Attachments</h2>
+                        <div id="report-files" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            <!-- Files will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-end space-x-3">
+                <button id="download-pdf" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition flex items-center space-x-2">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Download PDF</span>
+                </button>
+                <button id="print-report-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition flex items-center space-x-2">
+                    <i class="fas fa-print"></i>
+                    <span>Print Report</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Detail Modal -->
+    <div id="activity-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Activity Details</h3>
+                <button id="close-activity-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div id="activity-detail-content">
+                    <!-- Activity details will be shown here -->
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-end space-x-3">
+                <button id="edit-activity-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition">
+                    Edit
+                </button>
+                <button id="delete-activity-btn" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div id="file-preview-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4">
+                <h3 id="file-preview-title" class="text-xl font-bold text-gray-800 dark:text-white">File Preview</h3>
+                <button id="close-file-preview-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh] flex flex-col items-center">
+                <div id="file-preview-content" class="w-full">
+                    <!-- File preview will be shown here -->
+                </div>
+                <div class="mt-6 w-full">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p id="file-name" class="font-medium text-gray-800 dark:text-white"></p>
+                            <p id="file-size" class="text-sm text-gray-600 dark:text-gray-300"></p>
+                            <p id="file-date" class="text-sm text-gray-600 dark:text-gray-300"></p>
+                        </div>
+                        <a id="download-file-btn" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition flex items-center space-x-2">
+                            <i class="fas fa-download"></i>
+                            <span>Download</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Calendar functionality
+        let currentDate = new Date();
+        let selectedDate = null;
+        let activities = {};
+        let files = {};
+        
+        function renderCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const currentMonthYear = document.getElementById('current-month');
+            
+            // Clear previous calendar
+            calendarGrid.innerHTML = '';
+            
+            // Set current month and year
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            currentMonthYear.textContent = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Get first day of month and total days in month
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            
+            // Get days from previous month
+            const prevMonthDays = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+            
+            // Add empty cells for days of previous month
+            for (let i = 0; i < firstDay; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day p-2 text-center text-gray-400 dark:text-gray-500';
+                dayElement.textContent = prevMonthDays - firstDay + i + 1;
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Add days of current month
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day p-2 text-center cursor-pointer rounded-lg border border-transparent hover:border-green-300 dark:hover:border-green-700';
+                
+                // Highlight today
+                if (i === today.getDate() && currentDate.getMonth() === today.getMonth() && currentDate.getFullYear() === today.getFullYear()) {
+                    dayElement.classList.add('bg-green-100', 'dark:bg-green-900');
+                }
+                
+                // Highlight selected date
+                if (selectedDate && i === selectedDate.getDate() && currentDate.getMonth() === selectedDate.getMonth() && currentDate.getFullYear() === selectedDate.getFullYear()) {
+                    dayElement.classList.add('bg-green-200', 'dark:bg-green-800', 'font-bold');
+                }
+                
+                dayElement.textContent = i;
+                
+                // Add activity indicator if date has activities
+                const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${i}`;
+                if (activities[dateKey] && activities[dateKey].length > 0) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'w-2 h-2 bg-green-500 rounded-full mx-auto mt-1';
+                    dayElement.appendChild(indicator);
+                }
+                
+                dayElement.addEventListener('click', () => {
+                    selectDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), i));
+                });
+                
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Calculate remaining cells to fill the grid (42 cells total)
+            const remainingCells = 42 - (firstDay + daysInMonth);
+            
+            // Add empty cells for days of next month
+            for (let i = 1; i <= remainingCells; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day p-2 text-center text-gray-400 dark:text-gray-500';
+                dayElement.textContent = i;
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+        
+        function selectDate(date) {
+            selectedDate = date;
+            renderCalendar();
+            updateSelectedDateDisplay();
+            showActivitiesForSelectedDate();
+            showFilesForSelectedDate();
+        }
+        
+        function updateSelectedDateDisplay() {
+            const selectedDateElement = document.getElementById('selected-date');
+            const dateKey = getDateKey(selectedDate);
+            
+            if (selectedDate) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                selectedDateElement.innerHTML = `
+                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white">${selectedDate.toLocaleDateString('en-US', options)}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">${activities[dateKey] ? activities[dateKey].length : 0} activities, ${files[dateKey] ? files[dateKey].length : 0} files</p>
+                `;
+                
+                // Show activity form and list sections
+                document.getElementById('activity-form').classList.add('hidden');
+                document.getElementById('activities-list').classList.remove('hidden');
+                document.getElementById('file-upload-section').classList.remove('hidden');
+            } else {
+                selectedDateElement.innerHTML = `
+                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white">No date selected</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Select a date to view or add activities</p>
+                `;
+                
+                // Hide activity form and list sections
+                document.getElementById('activity-form').classList.add('hidden');
+                document.getElementById('activities-list').classList.add('hidden');
+                document.getElementById('file-upload-section').classList.add('hidden');
+                document.getElementById('files-list').classList.add('hidden');
+            }
+        }
+        
+        function showActivitiesForSelectedDate() {
+            if (!selectedDate) return;
+            
+            const dateKey = getDateKey(selectedDate);
+            const activitiesContainer = document.getElementById('activities-container');
+            activitiesContainer.innerHTML = '';
+            
+            if (activities[dateKey] && activities[dateKey].length > 0) {
+                activities[dateKey].forEach((activity, index) => {
+                    const activityElement = document.createElement('div');
+                    activityElement.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg fade-in';
+                    
+                    let priorityColor = 'bg-gray-200 dark:bg-gray-600';
+                    if (activity.priority === 'medium') priorityColor = 'bg-yellow-200 dark:bg-yellow-700';
+                    if (activity.priority === 'high') priorityColor = 'bg-red-200 dark:bg-red-700';
+                    
+                    activityElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-medium text-gray-800 dark:text-white">${activity.title}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">${activity.description || 'No description'}</p>
+                                <div class="flex items-center mt-2 space-x-4">
+                                    <span class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        ${activity.location || 'No location'}
+                                    </span>
+                                    <span class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        ${activity.time || 'No time'}
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${priorityColor} text-gray-800 dark:text-white">${activity.priority}</span>
+                        </div>
+                    `;
+                    
+                    activityElement.addEventListener('click', () => {
+                        showActivityDetail(activity, index);
+                    });
+                    
+                    activitiesContainer.appendChild(activityElement);
+                });
+            } else {
+                activitiesContainer.innerHTML = `
+                    <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-calendar-plus text-3xl mb-2"></i>
+                        <p>No activities for this date</p>
+                        <button id="add-first-activity" class="mt-4 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
+                            Add your first activity
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('add-first-activity').addEventListener('click', () => {
+                    document.getElementById('activity-form').classList.remove('hidden');
+                    document.getElementById('activities-list').classList.add('hidden');
+                });
+            }
+            
+            document.getElementById('activities-list').classList.remove('hidden');
+        }
+        
+        function showFilesForSelectedDate() {
+            if (!selectedDate) return;
+            
+            const dateKey = getDateKey(selectedDate);
+            const filesContainer = document.getElementById('files-container');
+            filesContainer.innerHTML = '';
+            
+            if (files[dateKey] && files[dateKey].length > 0) {
+                files[dateKey].forEach((file, index) => {
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'file-card bg-gray-50 dark:bg-gray-700 p-3 rounded-lg fade-in cursor-pointer';
+                    
+                    let fileIcon = 'fa-file';
+                    let fileTypeClass = 'text-gray-500';
+                    
+                    if (file.type.includes('image')) {
+                        fileIcon = 'fa-file-image';
+                        fileTypeClass = 'text-blue-500';
+                    } else if (file.type.includes('pdf')) {
+                        fileIcon = 'fa-file-pdf';
+                        fileTypeClass = 'text-red-500';
+                    } else if (file.type.includes('word')) {
+                        fileIcon = 'fa-file-word';
+                        fileTypeClass = 'text-blue-600';
+                    } else if (file.type.includes('video')) {
+                        fileIcon = 'fa-file-video';
+                        fileTypeClass = 'text-purple-500';
+                    }
+                    
+                    fileElement.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="${fileTypeClass} text-xl">
+                                <i class="fas ${fileIcon}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-800 dark:text-white truncate">${file.name}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${formatFileSize(file.size)}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    fileElement.addEventListener('click', () => {
+                        previewFile(file, index);
+                    });
+                    
+                    filesContainer.appendChild(fileElement);
+                });
+                
+                document.getElementById('files-list').classList.remove('hidden');
+            } else {
+                document.getElementById('files-list').classList.add('hidden');
+            }
+        }
+        
+        function showActivityDetail(activity, index) {
+            const modal = document.getElementById('activity-modal');
+            const content = document.getElementById('activity-detail-content');
+            
+            let priorityColor = 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white';
+            if (activity.priority === 'medium') priorityColor = 'bg-yellow-200 dark:bg-yellow-700 text-yellow-800 dark:text-white';
+            if (activity.priority === 'high') priorityColor = 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-white';
+            
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">${activity.title}</h3>
+                        <span class="px-3 py-1 rounded-full text-sm ${priorityColor}">${activity.priority}</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <p class="text-gray-800 dark:text-white">${activity.description || 'No description provided'}</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2 flex items-center">
+                                <i class="fas fa-map-marker-alt mr-2"></i> Location
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-300">${activity.location || 'Not specified'}</p>
+                        </div>
+                        
+                        <div class="bg-purple-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2 flex items-center">
+                                <i class="fas fa-clock mr-2"></i> Time
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-300">${activity.time || 'Not specified'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h4 class="font-medium text-gray-800 dark:text-white mb-2 flex items-center">
+                            <i class="fas fa-calendar-day mr-2"></i> Date
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300">${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Set up edit and delete buttons
+            document.getElementById('edit-activity-btn').onclick = () => {
+                editActivity(index);
+                modal.classList.add('hidden');
+            };
+            
+            document.getElementById('delete-activity-btn').onclick = () => {
+                if (confirm('Are you sure you want to delete this activity?')) {
+                    deleteActivity(index);
+                    modal.classList.add('hidden');
+                }
+            };
+            
+            modal.classList.remove('hidden');
+        }
+        
+        function previewFile(file, index) {
+            const modal = document.getElementById('file-preview-modal');
+            const content = document.getElementById('file-preview-content');
+            const title = document.getElementById('file-preview-title');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
+            const fileDate = document.getElementById('file-date');
+            const downloadBtn = document.getElementById('download-file-btn');
+            
+            title.textContent = `File Preview - ${file.name.split('.')[0]}`;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileDate.textContent = `Uploaded on ${new Date(file.uploadDate).toLocaleDateString()}`;
+            
+            // Set up download button
+            downloadBtn.href = file.url;
+            downloadBtn.download = file.name;
+            
+            // Clear previous content
+            content.innerHTML = '';
+            
+            // Show appropriate preview based on file type
+            if (file.type.includes('image')) {
+                const img = document.createElement('img');
+                img.src = file.url;
+                img.alt = file.name;
+                img.className = 'w-full h-auto max-h-[60vh] object-contain rounded-lg';
+                content.appendChild(img);
+            } else if (file.type.includes('pdf')) {
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center p-8 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <i class="fas fa-file-pdf text-6xl text-red-500 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-300">PDF preview not available. Download to view.</p>
+                    </div>
+                `;
+            } else if (file.type.includes('word')) {
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center p-8 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <i class="fas fa-file-word text-6xl text-blue-600 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-300">Word document preview not available. Download to view.</p>
+                    </div>
+                `;
+            } else if (file.type.includes('video')) {
+                const video = document.createElement('video');
+                video.src = file.url;
+                video.controls = true;
+                video.className = 'w-full h-auto max-h-[60vh] rounded-lg';
+                content.appendChild(video);
+            } else {
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center p-8 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <i class="fas fa-file text-6xl text-gray-500 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-300">File preview not available. Download to view.</p>
+                    </div>
+                `;
+            }
+            
+            modal.classList.remove('hidden');
+        }
+        
+        function addActivity(event) {
+            event.preventDefault();
+            
+            if (!selectedDate) return;
+            
+            const title = document.getElementById('activity-title').value;
+            const description = document.getElementById('activity-description').value;
+            const location = document.getElementById('activity-location').value;
+            const time = document.getElementById('activity-time').value;
+            const priority = document.getElementById('activity-priority').value;
+            
+            if (!title) {
+                alert('Please enter a title for the activity');
+                return;
+            }
+            
+            const dateKey = getDateKey(selectedDate);
+            const activity = {
+                title,
+                description,
+                location,
+                time,
+                priority,
+                createdAt: new Date()
+            };
+            
+            if (!activities[dateKey]) {
+                activities[dateKey] = [];
+            }
+            
+            activities[dateKey].push(activity);
+            saveData();
+            
+            // Reset form
+            document.getElementById('add-activity-form').reset();
+            
+            // Show activities list
+            document.getElementById('activity-form').classList.add('hidden');
+            showActivitiesForSelectedDate();
+            document.getElementById('activities-list').classList.remove('hidden');
+        }
+        
+        function editActivity(index) {
+            if (!selectedDate) return;
+            
+            const dateKey = getDateKey(selectedDate);
+            const activity = activities[dateKey][index];
+            
+            // Fill form with activity data
+            document.getElementById('activity-title').value = activity.title;
+            document.getElementById('activity-description').value = activity.description || '';
+            document.getElementById('activity-location').value = activity.location || '';
+            document.getElementById('activity-time').value = activity.time || '';
+            document.getElementById('activity-priority').value = activity.priority;
+            
+            // Show form
+            document.getElementById('activity-form').classList.remove('hidden');
+            document.getElementById('activities-list').classList.add('hidden');
+            
+            // Change form to edit mode
+            const form = document.getElementById('add-activity-form');
+            form.removeEventListener('submit', addActivity);
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                updateActivity(index);
+            };
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i><span>Update Activity</span>';
+        }
+        
+        function updateActivity(index) {
+            if (!selectedDate) return;
+            
+            const title = document.getElementById('activity-title').value;
+            const description = document.getElementById('activity-description').value;
+            const location = document.getElementById('activity-location').value;
+            const time = document.getElementById('activity-time').value;
+            const priority = document.getElementById('activity-priority').value;
+            
+            if (!title) {
+                alert('Please enter a title for the activity');
+                return;
+            }
+            
+            const dateKey = getDateKey(selectedDate);
+            activities[dateKey][index] = {
+                title,
+                description,
+                location,
+                time,
+                priority,
+                createdAt: activities[dateKey][index].createdAt,
+                updatedAt: new Date()
+            };
+            
+            saveData();
+            
+            // Reset form
+            document.getElementById('add-activity-form').reset();
+            const form = document.getElementById('add-activity-form');
+            form.removeEventListener('submit', updateActivity);
+            form.addEventListener('submit', addActivity);
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i><span>Add Activity</span>';
+            
+            // Show activities list
+            document.getElementById('activity-form').classList.add('hidden');
+            showActivitiesForSelectedDate();
+            document.getElementById('activities-list').classList.remove('hidden');
+        }
+        
+        function deleteActivity(index) {
+            if (!selectedDate) return;
+            
+            const dateKey = getDateKey(selectedDate);
+            activities[dateKey].splice(index, 1);
+            
+            if (activities[dateKey].length === 0) {
+                delete activities[dateKey];
+            }
+            
+            saveData();
+            showActivitiesForSelectedDate();
+        }
+        
+        function uploadFiles(event) {
+            event.preventDefault();
+            
+            if (!selectedDate) return;
+            
+            const fileInput = document.getElementById('file-upload');
+            const dateKey = getDateKey(selectedDate);
+            
+            if (fileInput.files.length === 0) {
+                alert('Please select at least one file to upload');
+                return;
+            }
+            
+            // In a real app, you would upload files to a server here
+            // For this demo, we'll simulate file uploads with local URLs
+            if (!files[dateKey]) {
+                files[dateKey] = [];
+            }
+            
+            Array.from(fileInput.files).forEach(file => {
+                const fileUrl = URL.createObjectURL(file);
+                
+                files[dateKey].push({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    url: fileUrl,
+                    uploadDate: new Date()
+                });
+            });
+            
+            saveData();
+            fileInput.value = '';
+            showFilesForSelectedDate();
+            
+            // Show success message
+            alert('Files uploaded successfully!');
+        }
+        
+        function getDateKey(date) {
+            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function saveData() {
+            localStorage.setItem('kknActivities', JSON.stringify(activities));
+            localStorage.setItem('kknFiles', JSON.stringify(files));
+        }
+        
+        function loadData() {
+            const savedActivities = localStorage.getItem('kknActivities');
+            const savedFiles = localStorage.getItem('kknFiles');
+            
+            if (savedActivities) {
+                activities = JSON.parse(savedActivities);
+            }
+            
+            if (savedFiles) {
+                files = JSON.parse(savedFiles);
+            }
+        }
+        
+        function generateReport() {
+            const modal = document.getElementById('report-modal');
+            const reportDate = document.getElementById('report-date');
+            const totalActivities = document.getElementById('total-activities');
+            const totalFiles = document.getElementById('total-files');
+            const duration = document.getElementById('duration');
+            const reportActivities = document.getElementById('report-activities');
+            const reportFiles = document.getElementById('report-files');
+            
+            // Set report date
+            reportDate.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            // Calculate totals
+            let activityCount = 0;
+            let fileCount = 0;
+            let datesWithActivities = [];
+            
+            Object.keys(activities).forEach(dateKey => {
+                activityCount += activities[dateKey].length;
+                datesWithActivities.push(dateKey);
+            });
+            
+            Object.keys(files).forEach(dateKey => {
+                fileCount += files[dateKey].length;
+            });
+            
+            totalActivities.textContent = activityCount;
+            totalFiles.textContent = fileCount;
+            
+            // Calculate duration
+            if (datesWithActivities.length > 0) {
+                const dateParts = datesWithActivities[0].split('-');
+                const startDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                const lastDateParts = datesWithActivities[datesWithActivities.length - 1].split('-');
+                const endDate = new Date(lastDateParts[0], lastDateParts[1] - 1, lastDateParts[2]);
+                
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                
+                if (diffDays < 30) {
+                    duration.textContent = `${diffDays} days`;
+                } else {
+                    const diffMonths = Math.round(diffDays / 30);
+                    duration.textContent = `${diffMonths} month${diffMonths > 1 ? 's' : ''}`;
+                }
+            } else {
+                duration.textContent = 'No activities';
+            }
+            
+            // Generate activities timeline
+            reportActivities.innerHTML = '';
+            
+            Object.keys(activities).sort().forEach(dateKey => {
+                const dateParts = dateKey.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'mb-4';
+                dateHeader.innerHTML = `
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                        ${date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                    </h3>
+                    <div class="border-l-2 border-green-500 dark:border-green-400 pl-4 mt-2 space-y-4">
+                        ${activities[dateKey].map(activity => `
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-medium text-gray-800 dark:text-white">${activity.title}</h4>
+                                    <span class="text-xs px-2 py-1 rounded-full ${
+                                        activity.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100' : 
+                                        activity.priority === 'high' ? 'bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100' : 
+                                        'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white'
+                                    }">${activity.priority}</span>
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">${activity.description || 'No description'}</p>
+                                <div class="flex flex-wrap gap-4 mt-3">
+                                    <span class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <i class="fas fa-map-marker-alt mr-1"></i> ${activity.location || 'No location'}
+                                    </span>
+                                    <span class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <i class="fas fa-clock mr-1"></i> ${activity.time || 'No time'}
+                                    </span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                reportActivities.appendChild(dateHeader);
+            });
+            
+            // Generate files list
+            reportFiles.innerHTML = '';
+            
+            Object.keys(files).sort().forEach(dateKey => {
+                const dateParts = dateKey.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                files[dateKey].forEach(file => {
+                    let fileIcon = 'fa-file';
+                    let fileTypeClass = 'text-gray-500';
+                    
+                    if (file.type.includes('image')) {
+                        fileIcon = 'fa-file-image';
+                        fileTypeClass = 'text-blue-500';
+                    } else if (file.type.includes('pdf')) {
+                        fileIcon = 'fa-file-pdf';
+                        fileTypeClass = 'text-red-500';
+                    } else if (file.type.includes('word')) {
+                        fileIcon = 'fa-file-word';
+                        fileTypeClass = 'text-blue-600';
+                    } else if (file.type.includes('video')) {
+                        fileIcon = 'fa-file-video';
+                        fileTypeClass = 'text-purple-500';
+                    }
+                    
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
+                    fileElement.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="${fileTypeClass} text-xl">
+                                <i class="fas ${fileIcon}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-800 dark:text-white truncate">${file.name}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${formatFileSize(file.size)}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    reportFiles.appendChild(fileElement);
+                });
+            });
+            
+            modal.classList.remove('hidden');
+        }
+        
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(22);
+            doc.setTextColor(34, 139, 34); // Forest green
+            doc.text('KKN Activity Report', 105, 20, { align: 'center' });
+            
+            // Add date
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated on ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, 105, 30, { align: 'center' });
+            
+            // Add summary section
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Summary', 14, 45);
+            doc.setDrawColor(34, 139, 34);
+            doc.line(14, 47, 50, 47);
+            
+            // Calculate totals
+            let activityCount = 0;
+            let fileCount = 0;
+            let datesWithActivities = [];
+            
+            Object.keys(activities).forEach(dateKey => {
+                activityCount += activities[dateKey].length;
+                datesWithActivities.push(dateKey);
+            });
+            
+            Object.keys(files).forEach(dateKey => {
+                fileCount += files[dateKey].length;
+            });
+            
+            // Add summary boxes
+            doc.setFillColor(232, 245, 232); // Light green
+            doc.roundedRect(14, 52, 40, 20, 3, 3, 'F');
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.text('Total Activities', 34, 57, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(activityCount.toString(), 34, 65, { align: 'center' });
+            
+            doc.setFillColor(232, 235, 245); // Light blue
+            doc.roundedRect(64, 52, 40, 20, 3, 3, 'F');
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.text('Total Files', 84, 57, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(fileCount.toString(), 84, 65, { align: 'center' });
+            
+            // Calculate duration
+            let durationText = 'No activities';
+            if (datesWithActivities.length > 0) {
+                const dateParts = datesWithActivities[0].split('-');
+                const startDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                const lastDateParts = datesWithActivities[datesWithActivities.length - 1].split('-');
+                const endDate = new Date(lastDateParts[0], lastDateParts[1] - 1, lastDateParts[2]);
+                
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                
+                if (diffDays < 30) {
+                    durationText = `${diffDays} days`;
+                } else {
+                    const diffMonths = Math.round(diffDays / 30);
+                    durationText = `${diffMonths} month${diffMonths > 1 ? 's' : ''}`;
+                }
+            }
+            
+            doc.setFillColor(245, 232, 245); // Light purple
+            doc.roundedRect(114, 52, 40, 20, 3, 3, 'F');
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.text('Duration', 134, 57, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(durationText, 134, 65, { align: 'center' });
+            
+            // Add activities section
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Activities Timeline', 14, 85);
+            doc.setDrawColor(34, 139, 34);
+            doc.line(14, 87, 60, 87);
+            
+            let yPosition = 95;
+            
+            Object.keys(activities).sort().forEach(dateKey => {
+                const dateParts = dateKey.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                // Add date header
+                doc.setFontSize(12);
+                doc.setTextColor(34, 139, 34);
+                doc.text(date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }), 14, yPosition);
+                yPosition += 7;
+                
+                // Add activities
+                activities[dateKey].forEach(activity => {
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(0, 0, 0);
+                    
+                    // Activity title with priority
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${activity.title} (${activity.priority})`, 20, yPosition);
+                    doc.setFont(undefined, 'normal');
+                    yPosition += 5;
+                    
+                    // Description
+                    if (activity.description) {
+                        const splitDescription = doc.splitTextToSize(activity.description, 170);
+                        doc.text(splitDescription, 20, yPosition);
+                        yPosition += 5 * splitDescription.length;
+                    }
+                    
+                    // Location and time
+                    let details = [];
+                    if (activity.location) details.push(`Location: ${activity.location}`);
+                    if (activity.time) details.push(`Time: ${activity.time}`);
+                    
+                    if (details.length > 0) {
+                        doc.text(details.join(' | '), 20, yPosition);
+                        yPosition += 5;
+                    }
+                    
+                    yPosition += 5; // Space between activities
+                });
+                
+                yPosition += 5; // Space between dates
+            });
+            
+            // Add files section if there are files
+            if (fileCount > 0) {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setFontSize(16);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Attachments', 14, yPosition);
+                doc.setDrawColor(34, 139, 34);
+                doc.line(14, yPosition + 2, 45, yPosition + 2);
+                yPosition += 10;
+                
+                let xPosition = 14;
+                
+                Object.keys(files).sort().forEach(dateKey => {
+                    const dateParts = dateKey.split('-');
+                    const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    
+                    files[dateKey].forEach(file => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                            xPosition = 14;
+                        }
+                        
+                        if (xPosition > 150) {
+                            xPosition = 14;
+                            yPosition += 15;
+                        }
+                        
+                        // File icon based on type
+                        let fileIcon = '📄';
+                        if (file.type.includes('image')) fileIcon = '🖼️';
+                        else if (file.type.includes('pdf')) fileIcon = '📕';
+                        else if (file.type.includes('word')) fileIcon = '📘';
+                        else if (file.type.includes('video')) fileIcon = '🎬';
+                        
+                        doc.text(`${fileIcon} ${file.name} (${formatFileSize(file.size)})`, xPosition, yPosition);
+                        xPosition += 60;
+                    });
+                });
+            }
+            
+            // Save the PDF
+            doc.save('KKN_Activity_Report.pdf');
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load saved data
+            loadData();
+            
+            // Render calendar
+            renderCalendar();
+            
+            // Set up event listeners
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+            
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+            
+            document.getElementById('add-activity-form').addEventListener('submit', addActivity);
+            
+            document.getElementById('add-activity-btn').addEventListener('click', () => {
+                document.getElementById('activity-form').classList.remove('hidden');
+                document.getElementById('activities-list').classList.add('hidden');
+            });
+            
+            document.getElementById('file-upload-form').addEventListener('submit', uploadFiles);
+            
+            document.getElementById('print-report').addEventListener('click', generateReport);
+            document.getElementById('mobile-print-report').addEventListener('click', generateReport);
+            
+            document.getElementById('close-report-modal').addEventListener('click', () => {
+                document.getElementById('report-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('close-activity-modal').addEventListener('click', () => {
+                document.getElementById('activity-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('close-file-preview-modal').addEventListener('click', () => {
+                document.getElementById('file-preview-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            
+            document.getElementById('print-report-btn').addEventListener('click', () => {
+                window.print();
+            });
+            
+            // Initialize with today's date
+            selectDate(new Date());
+        });
+    </script>
+</body>
+</html>
